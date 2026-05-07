@@ -1,976 +1,390 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agátka – Unit 10 Angličtina</title>
+<title>Agátka's English Quest ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0f0e17;
-  --surface: #1a1830;
-  --card: #22203a;
-  --border: #332f55;
-  --pink: #ff6b9d;
-  --purple: #a78bfa;
-  --teal: #5eead4;
-  --yellow: #fcd34d;
-  --text: #f0eeff;
-  --muted: #8b84b0;
-  --correct: #4ade80;
-  --wrong: #f87171;
+  --pink: #f472b6;
+  --pink-dark: #db2777;
+  --purple: #a855f7;
+  --purple-dark: #7c3aed;
+  --purple-light: #f5f3ff;
+  --green: #34d399;
+  --green-dark: #059669;
+  --red: #f87171;
+  --red-dark: #dc2626;
+  --bg: #fdf4ff;
+  --card: #ffffff;
+  --text: #1e1b2e;
+  --text2: #6b7280;
+  --shadow: 0 4px 24px rgba(168,85,247,0.12);
+  --radius: 18px;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
-  font-family: 'Trebuchet MS', sans-serif;
+  font-family: 'Nunito', sans-serif;
   background: var(--bg);
   min-height: 100vh;
-  color: var(--text);
-  padding: 0 0 80px;
-  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
 }
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(167,139,250,0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(255,107,157,0.08) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.app { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 0 16px; }
-
-/* ── SCREENS ── */
-.screen { display: none; }
-.screen.active { display: block; }
-
-/* ── HOME ── */
-#home { text-align: center; padding-top: 60px; }
-.home-emoji { font-size: 4rem; margin-bottom: 16px; }
-.home-title {
-  font-size: 2.4rem; font-weight: 700; color: var(--text);
-  line-height: 1.2; margin-bottom: 8px;
-}
-.home-title span { color: var(--pink); }
-.home-sub { color: var(--muted); font-size: 1rem; margin-bottom: 40px; }
-
-.topic-cards { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
-.topic-card {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 16px; padding: 20px 24px;
-  display: flex; align-items: center; gap: 16px;
-  cursor: pointer; transition: all 0.2s;
-  text-align: left;
-}
-.topic-card:hover { border-color: var(--purple); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(167,139,250,0.15); }
-.topic-card .t-icon { font-size: 2rem; flex-shrink: 0; }
-.topic-card .t-body { flex: 1; }
-.topic-card .t-name { font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-.topic-card .t-desc { font-size: 0.85rem; color: var(--muted); }
-.topic-card .t-badge {
-  font-size: 0.72rem; font-weight: 700; padding: 4px 10px;
-  border-radius: 20px; white-space: nowrap;
-}
-.badge-learn { background: rgba(94,234,212,0.15); color: var(--teal); border: 1px solid rgba(94,234,212,0.3); }
-.badge-quiz { background: rgba(255,107,157,0.15); color: var(--pink); border: 1px solid rgba(255,107,157,0.3); }
-
-.btn-all {
-  background: linear-gradient(135deg, var(--purple), var(--pink));
-  color: white; border: none; border-radius: 50px; padding: 16px 40px;
-  font-size: 1.05rem; font-weight: 700; cursor: pointer;
-  transition: all 0.2s; width: 100%; max-width: 320px;
-}
-.btn-all:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(167,139,250,0.3); }
-
-/* ── LEARN SCREEN ── */
-#learn { padding-top: 32px; }
-
-.learn-nav {
-  display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
-}
-.btn-back {
-  background: var(--card); border: 1.5px solid var(--border);
-  color: var(--text); border-radius: 10px; padding: 8px 14px;
-  font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
-}
-.btn-back:hover { border-color: var(--purple); }
-
-.learn-progress-bar {
-  flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
-}
-.learn-progress-fill {
-  height: 100%; background: linear-gradient(90deg, var(--purple), var(--pink));
-  border-radius: 3px; transition: width 0.4s ease;
-}
-.learn-step-count { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
-
-.learn-card {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 20px; padding: 32px 28px; margin-bottom: 20px;
-}
-.learn-topic-tag {
-  display: inline-block; font-size: 0.72rem; font-weight: 700;
-  padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
-  background: rgba(167,139,250,0.15); color: var(--purple);
-  border: 1px solid rgba(167,139,250,0.3);
-}
-.learn-rule-title {
-  font-size: 1.35rem; font-weight: 700; color: var(--text); margin-bottom: 12px; line-height: 1.3;
-}
-.learn-rule-desc {
-  font-size: 0.95rem; color: #c4bcee; line-height: 1.7; margin-bottom: 20px;
-}
-.learn-rule-desc strong { color: var(--yellow); }
-
-.example-box {
-  background: var(--surface); border-radius: 12px; padding: 16px 20px;
-  border-left: 3px solid var(--teal); margin-bottom: 12px;
-}
-.example-box .ex-label {
-  font-size: 0.72rem; font-weight: 700; color: var(--teal); text-transform: uppercase;
-  letter-spacing: 0.5px; margin-bottom: 8px;
-}
-.example-box .ex-item {
-  font-size: 0.92rem; color: var(--text); margin-bottom: 4px; display: flex; gap: 8px;
-}
-.example-box .ex-item:last-child { margin-bottom: 0; }
-.example-box .ex-arrow { color: var(--purple); font-weight: 700; }
-.example-box .ex-sent { font-size: 0.88rem; color: #c4bcee; font-style: italic; margin-top: 8px; border-top: 1px solid var(--border); padding-top: 8px; }
-
-.try-box { margin-top: 20px; }
-.try-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; }
-.try-question { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 14px; }
-.try-options { display: flex; flex-direction: column; gap: 8px; }
-.try-opt {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: 10px; padding: 12px 16px; cursor: pointer;
-  font-size: 0.92rem; color: var(--text); transition: all 0.15s; text-align: left;
-}
-.try-opt:hover:not(.disabled) { border-color: var(--purple); }
-.try-opt.correct { border-color: var(--correct); background: rgba(74,222,128,0.1); color: var(--correct); }
-.try-opt.wrong { border-color: var(--wrong); background: rgba(248,113,113,0.1); color: var(--wrong); }
-.try-opt.disabled { cursor: default; }
-.try-feedback {
-  margin-top: 12px; padding: 12px 16px; border-radius: 10px;
-  font-size: 0.88rem; display: none;
-}
-.try-feedback.show { display: block; }
-.try-feedback.ok { background: rgba(74,222,128,0.1); color: var(--correct); border: 1px solid rgba(74,222,128,0.2); }
-.try-feedback.bad { background: rgba(248,113,113,0.1); color: #fca5a5; border: 1px solid rgba(248,113,113,0.2); }
-
-.learn-btn-next {
-  background: linear-gradient(135deg, var(--purple), var(--pink));
-  color: white; border: none; border-radius: 50px; padding: 14px 32px;
-  font-size: 0.95rem; font-weight: 700; cursor: pointer;
-  transition: all 0.2s; display: none; width: 100%;
-}
-.learn-btn-next.show { display: block; }
-.learn-btn-next:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(167,139,250,0.3); }
-
-/* ── QUIZ SCREEN ── */
-#quiz { padding-top: 32px; }
-
-.quiz-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
-.quiz-title { font-size: 1rem; font-weight: 700; color: var(--text); flex: 1; }
-.quiz-round-badge {
-  font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 20px;
-  background: rgba(252,211,77,0.15); color: var(--yellow); border: 1px solid rgba(252,211,77,0.3);
-}
-.quiz-prog-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 20px; }
-.quiz-prog-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--purple)); border-radius: 3px; transition: width 0.4s ease; }
-
-.quiz-q-card {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 20px; padding: 28px 24px; margin-bottom: 16px;
-}
-.quiz-q-tag {
-  font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 20px;
-  background: rgba(94,234,212,0.12); color: var(--teal); border: 1px solid rgba(94,234,212,0.25);
-  display: inline-block; margin-bottom: 14px;
-}
-.quiz-q-text { font-size: 1.05rem; font-weight: 600; color: var(--text); line-height: 1.5; margin-bottom: 6px; }
-.quiz-q-hint { font-size: 0.82rem; color: var(--muted); font-style: italic; margin-bottom: 18px; }
-
-.quiz-opts { display: flex; flex-direction: column; gap: 9px; }
-.quiz-opt {
-  background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: 12px; padding: 13px 18px; cursor: pointer;
-  font-size: 0.93rem; color: var(--text); transition: all 0.15s; text-align: left;
-  display: flex; align-items: center; gap: 10px;
-}
-.quiz-opt:hover:not(.disabled) { border-color: var(--purple); background: rgba(167,139,250,0.07); }
-.quiz-opt.correct { border-color: var(--correct); background: rgba(74,222,128,0.1); }
-.quiz-opt.wrong { border-color: var(--wrong); background: rgba(248,113,113,0.1); }
-.quiz-opt.disabled { cursor: default; }
-.opt-letter {
-  width: 26px; height: 26px; border-radius: 50%; background: var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.75rem; font-weight: 700; flex-shrink: 0; transition: all 0.15s;
-}
-.quiz-opt.correct .opt-letter { background: var(--correct); color: #0f0e17; }
-.quiz-opt.wrong .opt-letter { background: var(--wrong); color: #0f0e17; }
-
-.quiz-feedback {
-  padding: 14px 18px; border-radius: 12px; font-size: 0.88rem;
-  line-height: 1.5; margin-bottom: 12px; display: none;
-}
-.quiz-feedback.show { display: block; }
-.quiz-feedback.ok { background: rgba(74,222,128,0.1); color: #86efac; border: 1px solid rgba(74,222,128,0.2); }
-.quiz-feedback.bad { background: rgba(248,113,113,0.1); color: #fca5a5; border: 1px solid rgba(248,113,113,0.2); }
-
-.quiz-btn-next {
-  background: linear-gradient(135deg, var(--teal), var(--purple));
-  color: #0f0e17; border: none; border-radius: 50px; padding: 14px 32px;
-  font-size: 0.95rem; font-weight: 700; cursor: pointer;
-  transition: all 0.2s; display: none; width: 100%;
-}
-.quiz-btn-next.show { display: block; }
-.quiz-btn-next:hover { transform: translateY(-2px); }
-
-/* ── RESULTS ── */
-#results { padding-top: 40px; text-align: center; padding-bottom: 60px; }
-.results-emoji { font-size: 4rem; margin-bottom: 16px; }
-.results-title { font-size: 1.9rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-.results-score {
-  font-size: 3.5rem; font-weight: 700; margin: 20px 0;
-  background: linear-gradient(135deg, var(--teal), var(--purple), var(--pink));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.results-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 32px; }
-.results-breakdown {
-  background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 16px; padding: 20px; margin-bottom: 28px; text-align: left;
-}
-.breakdown-title { font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; }
-.breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
-.breakdown-row:last-child { border-bottom: none; }
-.breakdown-label { font-size: 0.9rem; color: var(--text); }
-.breakdown-val { font-size: 0.9rem; font-weight: 700; }
-.val-good { color: var(--correct); }
-.val-bad { color: var(--wrong); }
-
-.results-btns { display: flex; flex-direction: column; gap: 12px; }
-.btn-retry {
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  color: white; border: none; border-radius: 50px; padding: 15px;
-  font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
-}
-.btn-retry:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,157,0.3); }
-.btn-home-result {
-  background: var(--card); border: 1.5px solid var(--border);
-  color: var(--text); border-radius: 50px; padding: 14px;
-  font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
-}
-.btn-home-result:hover { border-color: var(--purple); }
-
-/* ── LEARN DONE ── */
-#learn-done { padding-top: 60px; text-align: center; }
-.learn-done-emoji { font-size: 4rem; margin-bottom: 16px; }
-.learn-done-title { font-size: 1.9rem; font-weight: 700; margin-bottom: 12px; }
-.learn-done-sub { color: var(--muted); margin-bottom: 36px; }
-.btn-start-quiz {
-  background: linear-gradient(135deg, var(--purple), var(--pink));
-  color: white; border: none; border-radius: 50px; padding: 16px 40px;
-  font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%; max-width: 320px;
-}
-.btn-start-quiz:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(167,139,250,0.3); }
+body::before, body::after { content:''; position:fixed; border-radius:50%; pointer-events:none; z-index:0; }
+body::before { width:420px; height:420px; background:radial-gradient(circle, rgba(244,114,182,0.15), transparent 70%); top:-80px; right:-80px; }
+body::after  { width:360px; height:360px; background:radial-gradient(circle, rgba(168,85,247,0.12), transparent 70%); bottom:-60px; left:-60px; }
+.app { position:relative; z-index:1; width:100%; max-width:560px; }
+.screen { display:none; animation:fadeIn 0.35s ease; }
+.screen.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+.start-card { background:var(--card); border-radius:28px; padding:44px 36px; box-shadow:var(--shadow); text-align:center; }
+.start-emoji { font-size:64px; display:block; margin-bottom:16px; animation:bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.start-card h1 { font-family:'Fredoka One',cursive; font-size:2rem; color:var(--purple-dark); margin-bottom:8px; }
+.start-card p { color:var(--text2); font-size:1rem; margin-bottom:8px; line-height:1.5; }
+.topics { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:20px 0 28px; }
+.topic-badge { padding:6px 14px; border-radius:999px; font-size:.82rem; font-weight:700; background:var(--purple-light); color:var(--purple-dark); }
+.topic-badge.green { background:#ecfdf5; color:var(--green-dark); }
+.topic-badge.pink  { background:#fdf2f8; color:var(--pink-dark); }
+.quiz-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.tag { font-size:.72rem; font-weight:800; padding:4px 12px; border-radius:999px; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
+.tag-adverb  { background:#ede9fe; color:#6d28d9; }
+.tag-pc      { background:#fdf2f8; color:var(--pink-dark); }
+.tag-goingto { background:#ecfdf5; color:var(--green-dark); }
+.progress-wrap { flex:1; }
+.progress-bar { height:8px; background:#e9d5ff; border-radius:999px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--purple),var(--pink)); border-radius:999px; transition:width .4s ease; }
+.progress-text { font-size:.75rem; color:var(--text2); text-align:right; margin-top:4px; font-weight:600; }
+.q-card { background:var(--card); border-radius:var(--radius); padding:28px 28px 24px; box-shadow:var(--shadow); margin-bottom:16px; }
+.q-type { font-size:.75rem; color:var(--text2); font-weight:700; margin-bottom:10px; text-transform:uppercase; letter-spacing:.05em; }
+.q-text { font-size:1.05rem; font-weight:700; color:var(--text); line-height:1.6; margin-bottom:20px; }
+.q-text em { color:var(--purple-dark); font-style:italic; }
+.options { display:flex; flex-direction:column; gap:10px; }
+.opt-btn { background:var(--purple-light); border:2px solid transparent; border-radius:14px; padding:14px 18px; font-family:'Nunito',sans-serif; font-size:.95rem; font-weight:700; color:var(--purple-dark); cursor:pointer; text-align:left; transition:all .18s; }
+.opt-btn:hover { background:#ede9fe; border-color:var(--purple); transform:translateX(4px); }
+.opt-btn.correct { background:#d1fae5; border-color:var(--green-dark); color:var(--green-dark); }
+.opt-btn.wrong   { background:#fee2e2; border-color:var(--red-dark); color:var(--red-dark); }
+.opt-btn.reveal  { background:#d1fae5; border-color:var(--green-dark); color:var(--green-dark); opacity:.7; }
+.opt-btn:disabled { cursor:default; transform:none; }
+.fill-wrap { display:flex; flex-direction:column; gap:12px; }
+.fill-row { display:flex; flex-direction:column; gap:6px; }
+.fill-label { font-size:.8rem; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:.04em; }
+.fill-input { width:100%; padding:14px 16px; border:2px solid #e9d5ff; border-radius:14px; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:700; color:var(--text); background:#fafafa; outline:none; transition:border-color .2s, background .2s; }
+.fill-input:focus { border-color:var(--purple); background:#fff; }
+.fill-input.correct { border-color:var(--green-dark); background:#d1fae5; color:var(--green-dark); }
+.fill-input.wrong   { border-color:var(--red-dark); background:#fee2e2; color:var(--red-dark); }
+.fill-input:disabled { cursor:default; }
+.check-btn { width:100%; padding:14px; border-radius:14px; border:none; background:linear-gradient(135deg,var(--purple),var(--pink)); color:#fff; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; transition:all .15s; box-shadow:0 4px 16px rgba(168,85,247,.3); margin-top:4px; }
+.check-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(168,85,247,.4); }
+.check-btn:disabled { opacity:.5; cursor:default; transform:none; }
+.feedback { margin-top:16px; padding:14px 18px; border-radius:14px; font-weight:700; font-size:.92rem; display:none; line-height:1.5; }
+.feedback.show { display:block; animation:fadeIn .2s; }
+.feedback.ok  { background:#d1fae5; color:var(--green-dark); }
+.feedback.bad { background:#fee2e2; color:var(--red-dark); }
+.next-btn { display:none; width:100%; margin-top:14px; background:linear-gradient(135deg,var(--purple),var(--pink)); color:#fff; border:none; border-radius:14px; padding:15px; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; transition:transform .15s, box-shadow .15s; box-shadow:0 4px 16px rgba(168,85,247,.3); }
+.next-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(168,85,247,.4); }
+.next-btn.show { display:block; animation:fadeIn .2s; }
+.streak-badge { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px); background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#fff; padding:10px 24px; border-radius:999px; font-family:'Fredoka One',cursive; font-size:1.1rem; box-shadow:0 4px 20px rgba(251,191,36,.5); transition:transform .4s cubic-bezier(.34,1.56,.64,1); z-index:100; pointer-events:none; }
+.streak-badge.show { transform:translateX(-50%) translateY(0); }
+.result-card { background:var(--card); border-radius:28px; padding:40px 32px; box-shadow:var(--shadow); text-align:center; }
+.result-emoji { font-size:72px; display:block; margin-bottom:8px; }
+.result-grade { font-family:'Fredoka One',cursive; font-size:3.5rem; background:linear-gradient(135deg,var(--purple),var(--pink)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.result-pct { font-size:1.2rem; color:var(--text2); font-weight:700; margin-bottom:20px; }
+.result-stats { display:flex; gap:12px; justify-content:center; margin-bottom:24px; }
+.stat { padding:10px 20px; border-radius:12px; font-weight:800; font-size:.9rem; }
+.stat.good { background:#d1fae5; color:var(--green-dark); }
+.stat.bad  { background:#fee2e2; color:var(--red-dark); }
+.result-msg { color:var(--text2); font-size:1rem; margin-bottom:28px; line-height:1.5; }
+.retry-btn, .restart-btn { padding:14px 28px; border-radius:14px; border:none; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; transition:all .15s; margin:6px; }
+.retry-btn { background:linear-gradient(135deg,var(--red),#f59e0b); color:#fff; box-shadow:0 4px 16px rgba(239,68,68,.3); }
+.restart-btn { background:var(--purple-light); color:var(--purple-dark); }
+.retry-btn:hover, .restart-btn:hover { transform:translateY(-2px); }
+.perfect-card { background:linear-gradient(135deg,#7c3aed,#db2777); border-radius:28px; padding:44px 32px; box-shadow:0 8px 40px rgba(124,58,237,.35); text-align:center; color:#fff; }
+.perfect-card h2 { font-family:'Fredoka One',cursive; font-size:2.2rem; margin-bottom:12px; }
+.perfect-card p  { font-size:1.05rem; opacity:.9; margin-bottom:28px; line-height:1.5; }
+.perfect-stars { font-size:2rem; margin-bottom:16px; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+.confetti-piece { position:fixed; width:10px; height:10px; top:-20px; animation:fall linear forwards; pointer-events:none; z-index:200; border-radius:2px; }
+@keyframes fall { to{transform:translateY(110vh) rotate(720deg);opacity:0} }
 </style>
 </head>
 <body>
+<div class="streak-badge" id="streakBadge">🔥 <span id="streakCount">3</span> in a row!</div>
 <div class="app">
 
-<!-- HOME -->
-<div id="home" class="screen active">
-  <div class="home-emoji">🌟</div>
-  <h1 class="home-title">Angličtina<br><span>Unit 10</span></h1>
-  <p class="home-sub">Najprv si preštuduj každú tému, potom sprav test!</p>
-
-  <div class="topic-cards">
-    <div class="topic-card" onclick="startLearn('adverbs')">
-      <div class="t-icon">📝</div>
-      <div class="t-body">
-        <div class="t-name">Adverbs — príslovky</div>
-        <div class="t-desc">Ako ich tvoríme a ako sa líšia od adjektív</div>
+  <div class="screen active" id="scStart">
+    <div class="start-card">
+      <span class="start-emoji">📚</span>
+      <h1>English Quest</h1>
+      <p>Lesson 8 — ready to go, Agátka?</p>
+      <div class="topics">
+        <span class="topic-badge">Adverbs</span>
+        <span class="topic-badge pink">Present Continuous</span>
+        <span class="topic-badge green">Going To</span>
       </div>
-      <span class="t-badge badge-learn">Učiť sa</span>
-    </div>
-    <div class="topic-card" onclick="startLearn('goingto')">
-      <div class="t-icon">🚀</div>
-      <div class="t-body">
-        <div class="t-name">Going to</div>
-        <div class="t-desc">Plány a predsavzatia do budúcnosti</div>
-      </div>
-      <span class="t-badge badge-learn">Učiť sa</span>
-    </div>
-    <div class="topic-card" onclick="startLearn('presCont')">
-      <div class="t-icon">📅</div>
-      <div class="t-body">
-        <div class="t-name">Present Continuous — budúcnosť</div>
-        <div class="t-desc">Dohodnuté plány a stretnutia</div>
-      </div>
-      <span class="t-badge badge-learn">Učiť sa</span>
-    </div>
-    <div class="topic-card" onclick="startQuiz(null)">
-      <div class="t-icon">🎯</div>
-      <div class="t-body">
-        <div class="t-name">Celkový test — všetky témy</div>
-        <div class="t-desc">Random otázky zo všetkého</div>
-      </div>
-      <span class="t-badge badge-quiz">Kvíz</span>
+      <p style="color:var(--text2);font-size:.9rem;">Píš odpovede sama · retry až do perfektného výsledku ✨</p>
+      <button class="next-btn show" style="margin-top:24px" onclick="startQuiz(false)">Let's go! 🚀</button>
     </div>
   </div>
-</div>
 
-<!-- LEARN -->
-<div id="learn" class="screen">
-  <div class="learn-nav">
-    <button class="btn-back" onclick="showHome()">← Späť</button>
-    <div class="learn-progress-bar"><div class="learn-progress-fill" id="learnProgFill"></div></div>
-    <span class="learn-step-count" id="learnStepCount"></span>
+  <div class="screen" id="scQuiz">
+    <div class="quiz-header">
+      <span class="tag" id="qTag"></span>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-text" id="progressText">0 / 0</div>
+      </div>
+    </div>
+    <div class="q-card">
+      <div class="q-type" id="qType"></div>
+      <div class="q-text" id="qText"></div>
+      <div id="qInput"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next →</button>
   </div>
-  <div id="learnContent"></div>
-  <button class="learn-btn-next" id="learnNextBtn" onclick="learnNext()">Ďalej →</button>
-</div>
 
-<!-- LEARN DONE -->
-<div id="learn-done" class="screen">
-  <div class="learn-done-emoji">🎉</div>
-  <h2 class="learn-done-title">Výborne!</h2>
-  <p class="learn-done-sub">Teraz si to precvič v teste!</p>
-  <button class="btn-start-quiz" id="learnDoneQuizBtn" onclick="startQuizFromLearn()">Spustiť kvíz →</button>
-</div>
-
-<!-- QUIZ -->
-<div id="quiz" class="screen">
-  <div class="quiz-header">
-    <button class="btn-back" onclick="showHome()">← Späť</button>
-    <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizProgFill"></div></div>
-    <span class="quiz-round-badge" id="quizRoundBadge"></span>
+  <div class="screen" id="scResult">
+    <div class="result-card">
+      <span class="result-emoji" id="rEmoji">😊</span>
+      <div class="result-grade" id="rGrade">B</div>
+      <div class="result-pct" id="rPct">75%</div>
+      <div class="result-stats">
+        <div class="stat good" id="rCorrect">✓ 0 correct</div>
+        <div class="stat bad" id="rWrong">✗ 0 wrong</div>
+      </div>
+      <div class="result-msg" id="rMsg"></div>
+      <button class="retry-btn" id="retryBtn" onclick="startRetry()">🔁 Retry wrong answers</button>
+      <button class="restart-btn" onclick="startQuiz(false)">↺ Start over</button>
+    </div>
   </div>
-  <div id="quizContent"></div>
-  <div class="quiz-feedback" id="quizFeedback"></div>
-  <button class="quiz-btn-next" id="quizNextBtn" onclick="quizNext()">Ďalej →</button>
-</div>
 
-<!-- RESULTS -->
-<div id="results" class="screen">
-  <div class="results-emoji" id="resultsEmoji"></div>
-  <h2 class="results-title" id="resultsTitle"></h2>
-  <div class="results-score" id="resultsScore"></div>
-  <p class="results-sub" id="resultsSub"></p>
-  <div class="results-breakdown" id="resultsBreakdown"></div>
-  <div class="results-btns" id="resultsBtns"></div>
-</div>
+  <div class="screen" id="scPerfect">
+    <div class="perfect-card">
+      <div class="perfect-stars">⭐⭐⭐</div>
+      <h2>PERFECT! 🎉</h2>
+      <p id="perfectMsg">Všetky otázky správne! Si absolútna hviezda, Agátka!</p>
+      <button class="restart-btn" style="background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.4);" onclick="startQuiz(false)">↺ Znova od začiatku</button>
+    </div>
+  </div>
 
 </div>
-
 <script>
-// ══════════════════════════════════════════════
-// LEARN CONTENT
-// ══════════════════════════════════════════════
-const learnSteps = {
+const ALL_QUESTIONS = [
+  // ADVERBS — identify type (mc)
+  {topic:'adverb',type:'What type of adverb?',mode:'mc',text:'She ran <em>quickly</em> to catch the bus.',opts:['manner','time','place','frequency'],ans:'manner',hint:'"Quickly" tells us HOW she ran → adverb of manner.'},
+  {topic:'adverb',type:'What type of adverb?',mode:'mc',text:'We are going on holiday <em>tomorrow</em>.',opts:['manner','time','place','degree'],ans:'time',hint:'"Tomorrow" tells us WHEN → adverb of time.'},
+  {topic:'adverb',type:'What type of adverb?',mode:'mc',text:'The cat is sleeping <em>inside</em>.',opts:['manner','time','place','frequency'],ans:'place',hint:'"Inside" tells us WHERE → adverb of place.'},
+  {topic:'adverb',type:'What type of adverb?',mode:'mc',text:'She is <em>extremely</em> good at maths.',opts:['manner','degree','frequency','time'],ans:'degree',hint:'"Extremely" tells us HOW MUCH → adverb of degree.'},
+  {topic:'adverb',type:'What type of adverb?',mode:'mc',text:'He <em>never</em> eats vegetables.',opts:['manner','time','place','frequency'],ans:'frequency',hint:'"Never" tells us HOW OFTEN → adverb of frequency.'},
+  {topic:'adverb',type:'What type of adverb?',mode:'mc',text:'The children played <em>outside</em> all day.',opts:['manner','time','place','degree'],ans:'place',hint:'"Outside" tells us WHERE → adverb of place.'},
+  {topic:'adverb',type:'What type of adverb?',mode:'mc',text:'He spoke <em>softly</em> so as not to wake the baby.',opts:['manner','frequency','degree','time'],ans:'manner',hint:'"Softly" tells us HOW he spoke → adverb of manner.'},
 
-adverbs: [
-  {
-    tag: 'Príslovky (Adverbs)',
-    title: 'Čo je to príslovka?',
-    desc: `Príslovka opisuje <strong>sloveso</strong> — hovorí nám <em>ako</em>, <em>kde</em>, <em>kedy</em> alebo <em>ako často</em> sa niečo deje.<br><br>
-Rozlišujeme 5 typov prísloviek:`,
-    examples: [
-      { pairs: [
-        ['manner (ako)', 'quickly, softly, angrily'],
-        ['time (kedy)', 'today, tomorrow, soon'],
-        ['place (kde)', 'here, outside, nearby'],
-        ['degree (do akej miery)', 'very, extremely, barely'],
-        ['frequency (ako často)', 'always, never, sometimes'],
-      ]},
-    ],
-    try: {
-      q: '"She sings ___" — aký typ príslovky je slovo "beautifully"?',
-      opts: ['manner (ako)', 'time (kedy)', 'place (kde)', 'frequency (ako často)'],
-      ans: 'manner (ako)',
-      fb: 'Áno! "Beautifully" hovorí HOW (ako) spieva — je to adverb of manner.'
-    }
-  },
-  {
-    tag: 'Adverbs — tvorenie',
-    title: 'Pravidlo 1: Pridaj -ly',
-    desc: `Väčšinu prísloviek spravíš tak, že k <strong>adjektívu</strong> jednoducho pridáš <strong>-ly</strong>.`,
-    examples: [
-      { label: 'Adjektívum → Príslovka', pairs: [
-        ['quick', 'quickly'],
-        ['bad', 'badly'],
-        ['sudden', 'suddenly'],
-        ['strong', 'strongly'],
-      ]},
-      { sent: '"She spoke quietly." — hovorí HOW hovorila → príslovka' }
-    ],
-    try: {
-      q: 'Ako spravíš príslovku zo slova "slow"?',
-      opts: ['slowely', 'slowly', 'slowy', 'slowing'],
-      ans: 'slowly',
-      fb: 'Správne! slow + ly = slowly. Jednoduché!'
-    }
-  },
-  {
-    tag: 'Adverbs — tvorenie',
-    title: 'Pravidlo 2: -y mením na -i, potom +ly',
-    desc: `Ak adjektívum končí na <strong>-y</strong>, zmeň <strong>y → i</strong> a potom pridaj <strong>-ly</strong>.`,
-    examples: [
-      { label: 'Adjektívum → Príslovka', pairs: [
-        ['angry', 'angrily'],
-        ['happy', 'happily'],
-        ['hungry', 'hungrily'],
-        ['lazy', 'lazily'],
-        ['easy', 'easily'],
-      ]},
-      { sent: '"She munched happily on her chocolate bar."' }
-    ],
-    try: {
-      q: 'Ako spravíš príslovku zo slova "heavy"?',
-      opts: ['heavyly', 'heavilly', 'heavily', 'heavely'],
-      ans: 'heavily',
-      fb: 'Správne! heavy → heav-i-ly. Vždy keď končí na -y, meníš y → i!'
-    }
-  },
-  {
-    tag: 'Adverbs — tvorenie',
-    title: 'Pravidlo 3: Adjektíva na -le',
-    desc: `Ak adjektívum končí na <strong>-le</strong>, len zameníš <strong>-e za -y</strong>.`,
-    examples: [
-      { label: 'Adjektívum → Príslovka', pairs: [
-        ['terrible', 'terribly'],
-        ['comfortable', 'comfortably'],
-        ['possible', 'possibly'],
-        ['gentle', 'gently'],
-      ]},
-      { sent: '"I slept terribly last night."' }
-    ],
-    try: {
-      q: 'Ako spravíš príslovku zo slova "simple"?',
-      opts: ['simplely', 'simply', 'simplily', 'simplay'],
-      ans: 'simply',
-      fb: 'Výborne! simple → simpl-y. Vyhodíš -e a dáš -y.'
-    }
-  },
-  {
-    tag: 'Adverbs — tvorenie',
-    title: 'Pravidlo 4: Adjektíva na -ic',
-    desc: `Ak adjektívum končí na <strong>-ic</strong>, pridáš <strong>-ally</strong>.<br><br>
-Výnimka: <strong>public → publicly</strong> (nie publically!)`,
-    examples: [
-      { label: 'Adjektívum → Príslovka', pairs: [
-        ['basic', 'basically'],
-        ['tragic', 'tragically'],
-        ['enthusiastic', 'enthusiastically'],
-        ['public', 'publicly ⚠️ výnimka!'],
-      ]}
-    ],
-    try: {
-      q: 'Ako spravíš príslovku zo slova "dramatic"?',
-      opts: ['dramaticly', 'dramatically', 'dramaticaly', 'dramatic'],
-      ans: 'dramatically',
-      fb: 'Správne! dramatic + ally = dramatically.'
-    }
-  },
-  {
-    tag: 'Adverbs — tvorenie',
-    title: 'Pravidlo 5: Nepravidelné — nemenia sa',
-    desc: `Niektoré slová sú <strong>rovnaké</strong> ako adjektívum aj ako príslovka. Nepridávaš nič!<br><br>
-Špeciálny prípad: <strong>good → well</strong>`,
-    examples: [
-      { label: 'Adjektívum = Príslovka', pairs: [
-        ['fast', 'fast'],
-        ['hard', 'hard'],
-        ['late', 'late'],
-        ['straight', 'straight'],
-        ['wrong', 'wrong'],
-        ['good', 'well ⚠️'],
-      ]},
-      { sent: '"You\'ll have to act fast." / "She sings well."' }
-    ],
-    try: {
-      q: '"He worked very ___." — adjektívum je "hard". Aká je príslovka?',
-      opts: ['hardly', 'hardily', 'hardly', 'hard'],
-      ans: 'hard',
-      fb: 'Správne! Hard zostáva hard. Pozor: "hardly" existuje, ale znamená "sotva" — to je iné slovo!'
-    }
-  },
-  {
-    tag: 'Adverbs vs Adjectives',
-    title: 'Adjektívum vs Príslovka — rozdiel',
-    desc: `<strong>Adjektívum</strong> opisuje <em>podstatné meno (noun)</em>:<br>
-→ "She is a <strong>quick</strong> runner." (opisuje runner)<br><br>
-<strong>Príslovka</strong> opisuje <em>sloveso (verb)</em>:<br>
-→ "She runs <strong>quickly</strong>." (opisuje runs)`,
-    examples: [
-      { label: 'Porovnanie', pairs: [
-        ['The dog is loud. (adj)', 'The dog barks loudly. (adv)'],
-        ['He is a careful driver. (adj)', 'He drives carefully. (adv)'],
-      ]}
-    ],
-    try: {
-      q: '"The small kid chewed ___ on the crunchy chips." — quick/quickly?',
-      opts: ['quick', 'quickly', 'quicker', 'most quick'],
-      ans: 'quickly',
-      fb: 'Správne! "Chewed" je sloveso — opisujeme ho príslovkou "quickly".'
-    }
-  },
-],
+  // ADVERBS — make the adverb (fill)
+  {topic:'adverb',type:'Write the adverb form',mode:'fill',text:'What is the adverb form of <em>happy</em>?',ans:'happily',hint:'y → i + ly: happy → happily.'},
+  {topic:'adverb',type:'Write the adverb form',mode:'fill',text:'What is the adverb form of <em>quick</em>?',ans:'quickly',hint:'quick + ly = quickly.'},
+  {topic:'adverb',type:'Write the adverb form',mode:'fill',text:'What is the adverb form of <em>angry</em>?',ans:'angrily',hint:'y → i + ly: angry → angrily.'},
+  {topic:'adverb',type:'Write the adverb form',mode:'fill',text:'What is the adverb form of <em>good</em>?',ans:'well',hint:'"Good" is irregular → the adverb is "well".'},
+  {topic:'adverb',type:'Write the adverb form',mode:'fill',text:'What is the adverb form of <em>fast</em>?',ans:'fast',hint:'"Fast" is irregular → the adverb is also "fast" (no -ly!).'},
+  {topic:'adverb',type:'Write the adverb form',mode:'fill',text:'What is the adverb form of <em>loud</em>?',ans:'loudly',hint:'loud + ly = loudly.'},
+  {topic:'adverb',type:'Write the adverb form',mode:'fill',text:'What is the adverb form of <em>hungry</em>?',ans:'hungrily',hint:'y → i + ly: hungry → hungrily.'},
+  {topic:'adverb',type:'Write the adverb form',mode:'fill',text:'What is the adverb form of <em>slow</em>?',ans:'slowly',hint:'slow + ly = slowly.'},
+  {topic:'adverb',type:'Write the adverb form',mode:'fill',text:'What is the adverb form of <em>peaceful</em>?',ans:'peacefully',hint:'peaceful + ly = peacefully.'},
 
-goingto: [
-  {
-    tag: 'Going to',
-    title: 'Čo vyjadruje "going to"?',
-    desc: `<strong>Going to</strong> používame na:<br><br>
-1. <strong>Plány a predsavzatia</strong> — viem, čo chcem urobiť<br>
-2. <strong>Predpovede</strong> — vidím niečo, čo to naznačuje`,
-    examples: [
-      { label: 'Forma', pairs: [
-        ['kladná', 'I am going to / He is going to / They are going to'],
-        ['záporná', "I'm not going to / He isn't going to"],
-        ['otázka', 'Are you going to...? / Is she going to...?'],
-      ]},
-      { sent: '"I\'m going to visit my grandma." / "Look at those clouds — it\'s going to rain!"' }
-    ],
-    try: {
-      q: '"She ___ study for the test." — doplň správne going to:',
-      opts: ["She's going to", "She going to", "She are going to", "She am going to"],
-      ans: "She's going to",
-      fb: "Správne! She = is → She's going to. She IS going to study."
-    }
-  },
-  {
-    tag: 'Going to',
-    title: 'Going to — záporné vety',
-    desc: `Záporné vety tvoríš pridaním <strong>not</strong> medzi be a going to.<br><br>
-<strong>I am not going to</strong> → I'm not going to<br>
-<strong>He is not going to</strong> → He isn't going to<br>
-<strong>They are not going to</strong> → They aren't going to`,
-    examples: [
-      { label: 'Príklady', pairs: [
-        ["I'm not going to eat pizza.", ''],
-        ["She isn't going to play football.", ''],
-        ["We aren't going to travel this summer.", ''],
-      ]}
-    ],
-    try: {
-      q: '"They ___ go to the party." — záporná forma:',
-      opts: ["They aren't going to", "They not going to", "They isn't going to", "They don't going to"],
-      ans: "They aren't going to",
-      fb: "Áno! They are → They aren't going to. Vždy pracuj s be (am/is/are)!"
-    }
-  },
-  {
-    tag: 'Going to',
-    title: 'Going to — otázky',
-    desc: `Otázku tvoríš tak, že <strong>be</strong> dáš na začiatok vety.`,
-    examples: [
-      { label: 'Forma', pairs: [
-        ['Are you going to...?', ''],
-        ['Is she going to...?', ''],
-        ['Are they going to...?', ''],
-      ]},
-      { sent: '"Are you going to watch the match?" / "Is he going to come?"' }
-    ],
-    try: {
-      q: 'Ako spravíš otázku z "He is going to travel to London."?',
-      opts: ['Is he going to travel to London?', 'He is going to travel to London?', 'Does he going to travel?', 'Going he to travel to London?'],
-      ans: 'Is he going to travel to London?',
-      fb: 'Výborne! Stačí dať IS na začiatok: Is he going to...?'
-    }
-  },
-],
+  // ADVERBS — adj vs adverb (fill)
+  {topic:'adverb',type:'Adjective or adverb?',mode:'fill',text:'The <em>small</em> kid chewed quickly on the crunchy chips.\nIs "small" an adjective or an adverb?',ans:'adjective',accept:['adjective'],hint:'"Small" describes the noun "kid" → adjective.'},
+  {topic:'adverb',type:'Adjective or adverb?',mode:'fill',text:'The small kid chewed <em>quickly</em> on the crunchy chips.\nIs "quickly" an adjective or an adverb?',ans:'adverb',accept:['adverb'],hint:'"Quickly" describes HOW he chewed → adverb.'},
+  {topic:'adverb',type:'Fill in the correct word',mode:'fill',text:'She danced _____ at the school show.\n(Use the adverb form of "beautiful")',ans:'beautifully',hint:'Describe HOW she danced → adverb → beautifully.'},
+  {topic:'adverb',type:'Adjective or adverb? Fill in.',mode:'fill',text:'He is a _____ singer.\n(good or well?)',ans:'good',accept:['good'],hint:'"Singer" is a noun → describe it with an ADJECTIVE → good.'},
+  {topic:'adverb',type:'Adjective or adverb? Fill in.',mode:'fill',text:'She sings _____.\n(good or well?)',ans:'well',accept:['well'],hint:'Describe the verb "sings" with an ADVERB → well.'},
 
-presCont: [
-  {
-    tag: 'Present Continuous — budúcnosť',
-    title: 'Kedy používame Present Continuous pre budúcnosť?',
-    desc: `Present Continuous pre budúcnosť používame, keď máme <strong>dohodnutý plán</strong> — niečo čo je už <em>zarezervované, dohodnuté</em>.<br><br>
-Anglicky: <strong>arrangement</strong> = dohodnutý plán / rezervácia<br><br>
-Rozdiel od going to:<br>
-→ <em>Going to</em>: chcem to urobiť (úmysel)<br>
-→ <em>Present Continuous</em>: je to už dohodnuté (rezervácia, kúpené lístky...)`,
-    examples: [
-      { label: 'Príklady', pairs: [
-        ["I'm flying to Paris on Monday.", '(kúpila som lístok)'],
-        ["She's seeing the doctor at 3.", '(má objednaný termín)'],
-        ["We're getting married in June.", '(je to naplánované)'],
-      ]}
-    ],
-    try: {
-      q: 'Mám kúpený lístok na koncert zajtra. Poviem:',
-      opts: ["I'm going to a concert tomorrow.", "I go to a concert tomorrow.", "I going to a concert tomorrow.", "I will going to a concert."],
-      ans: "I'm going to a concert tomorrow.",
-      fb: "Správne! Lístok je kúpený = arrangement = Present Continuous. I'm going to a concert."
-    }
-  },
-  {
-    tag: 'Present Continuous — budúcnosť',
-    title: 'Forma Present Continuous',
-    desc: `Forma je rovnaká ako normálny Present Continuous:<br><br>
-<strong>am / is / are + sloveso-ing</strong><br><br>
-Len kontext (budúcnosť) ti hovorí, že ide o plán.`,
-    examples: [
-      { label: 'Forma', pairs: [
-        ['I am flying → I\'m flying', ''],
-        ['She is seeing → She\'s seeing', ''],
-        ['They are visiting → They\'re visiting', ''],
-      ]},
-      { sent: '"What are you doing this weekend?" — "I\'m visiting my grandparents."' }
-    ],
-    try: {
-      q: '"We ___ (meet) our friends on Saturday." — doplň:',
-      opts: ["We're meeting", "We meeting", "We going to meet", "We meets"],
-      ans: "We're meeting",
-      fb: "Výborne! We are meeting → We're meeting. am/is/are + -ing!"
-    }
-  },
-  {
-    tag: 'Present Continuous — budúcnosť',
-    title: 'Going to vs Present Continuous — zhrnutie',
-    desc: `Oba časy hovoria o budúcnosti, ale...<br><br>
-<strong>Going to</strong> = plán / úmysel / predpoveď<br>
-<strong>Present Continuous</strong> = konkrétny dohodnutý plán (arrangement)`,
-    examples: [
-      { label: 'Porovnanie', pairs: [
-        ["I'm going to learn guitar. (plán/úmysel)", ''],
-        ["I'm having a guitar lesson tomorrow at 4. (dohodnutá lekcia)", ''],
-        ["It's going to rain. (predpoveď)", ''],
-      ]}
-    ],
-    try: {
-      q: '"Mám objednaný termín u zubára v utorok." — čo použiješ?',
-      opts: ['Present Continuous — I\'m seeing the dentist on Tuesday.', 'Going to — I\'m going to see the dentist.', 'Obe sú rovnako správne.', 'Will — I will see the dentist.'],
-      ans: 'Present Continuous — I\'m seeing the dentist on Tuesday.',
-      fb: "Správne! Termín je objednaný = arrangement → Present Continuous je prirodzenejšie."
-    }
-  },
-],
+  // PRESENT CONTINUOUS (fill)
+  {topic:'pc',type:'Present Continuous — write the correct form',mode:'fill',text:'I _____ to New York tomorrow morning. (fly)\nWrite: I\'m ___ing',ans:"i'm flying",accept:["i'm flying","im flying","i am flying"],hint:'arrangement = dohodnutý plán, rezervácia → I am flying → I\'m flying.'},
+  {topic:'pc',type:'Present Continuous — write the correct form',mode:'fill',text:'She _____ the dentist at 6 o\'clock. (see)\nWrite: She\'s ___ing',ans:"she's seeing",accept:["she's seeing","she is seeing","shes seeing"],hint:'Termín u lekára = arrangement → She is seeing → She\'s seeing.'},
+  {topic:'pc',type:'Present Continuous — write the correct form',mode:'fill',text:'We _____ married next week. (get)\nWrite: We\'re ___ing',ans:"we're getting",accept:["we're getting","we are getting","were getting"],hint:'arrangement = všetko dohodnuté → We are getting → We\'re getting.'},
+  {topic:'pc',type:'Present Continuous — write the correct form',mode:'fill',text:'They _____ to a concert tomorrow night. (go)\nWrite: They\'re ___ing',ans:"they're going",accept:["they're going","they are going","theyre going"],hint:'arrangement = lístky kúpené → They are going → They\'re going.'},
+  {topic:'pc',type:'Present Continuous — write the correct form',mode:'fill',text:'He _____ his grandparents this weekend. (visit)',ans:"he's visiting",accept:["he's visiting","he is visiting","hes visiting"],hint:'he → is → he is visiting → he\'s visiting.'},
+  {topic:'pc',type:'Present Continuous — write the correct form',mode:'fill',text:'My parents _____ a new car next week. (buy)',ans:"are buying",accept:["are buying","my parents are buying"],hint:'my parents = they → are + buying.'},
+  {topic:'pc',type:'Present Continuous — write the question',mode:'fill',text:'"_____ you _____ anyone for dinner on Friday?" (meet)\nWrite the full verb phrase:',ans:"are you meeting",accept:["are you meeting"],hint:'Question: Are + you + meeting?'},
 
-};
+  // GOING TO — positive (fill)
+  {topic:'goingto',type:'Going to — write the correct form',mode:'fill',text:'I _____ meet my friends after class.\n(am/is/are + going to)',ans:"am going to",accept:["am going to","i am going to","i'm going to"],hint:'I → am → I am going to.'},
+  {topic:'goingto',type:'Going to — write the correct form',mode:'fill',text:'Bob and Cathy _____ see a movie tonight.\n(am/is/are + going to)',ans:"are going to",accept:["are going to"],hint:'Bob and Cathy = they → are going to.'},
+  {topic:'goingto',type:'Going to — write the correct form',mode:'fill',text:'My sister _____ look for a new school next year.\n(am/is/are + going to)',ans:"is going to",accept:["is going to","she is going to","she's going to"],hint:'My sister = she → is going to.'},
+  {topic:'goingto',type:'Going to — write the correct form',mode:'fill',text:'My classmates and I _____ have a test on Monday.\n(am/is/are + going to)',ans:"are going to",accept:["are going to"],hint:'"My classmates and I" = we → are going to.'},
 
-// ══════════════════════════════════════════════
-// QUIZ QUESTIONS
-// ══════════════════════════════════════════════
-const allQuestions = [
-  // ADVERBS — tvorenie
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "quick"?', opts:['quickly','quickily','quickely','quicks'], ans:'quickly', hint:'Pravidlo 1: quick + ly' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "happy"?', opts:['happyly','happily','hapily','happely'], ans:'happily', hint:'Pravidlo 2: y → i + ly' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "angry"?', opts:['angrily','angrly','angryly','angrelly'], ans:'angrily', hint:'Pravidlo 2: y → i + ly' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "terrible"?', opts:['terribly','terriblely','terriblily','terribly'], ans:'terribly', hint:'Pravidlo 3: -le → vymeniš e za y' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "comfortable"?', opts:['comfortablely','comfortabily','comfortably','comfortibaly'], ans:'comfortably', hint:'Pravidlo 3: -le → comfortabl-y' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "basic"?', opts:['basicly','basicaly','basically','basicilly'], ans:'basically', hint:'Pravidlo 4: -ic → + ally' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "tragic"?', opts:['tragicly','tragically','tragicaly','tragily'], ans:'tragically', hint:'Pravidlo 4: -ic → + ally' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "fast"?', opts:['fastly','fasty','fast','fasted'], ans:'fast', hint:'Pravidlo 5: fast zostáva fast — nemení sa!' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "hard"?', opts:['hardly','hardily','hardly','hard'], ans:'hard', hint:'Pravidlo 5: hard zostáva hard. (Hardly = sotva — iné slovo!)' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "good"?', opts:['goodly','goody','well','goods'], ans:'well', hint:'Výnimka! good → well' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "bad"?', opts:['badily','badly','bady','badely'], ans:'badly', hint:'Pravidlo 1: bad + ly = badly' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "slow"?', opts:['slowely','slowy','slowly','slowily'], ans:'slowly', hint:'Pravidlo 1: slow + ly = slowly' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "gentle"?', opts:['gentlely','gently','gentilly','gentley'], ans:'gently', hint:'Pravidlo 3: gentl-y' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "easy"?', opts:['easyly','easilly','easily','easely'], ans:'easily', hint:'Pravidlo 2: easy → easi + ly' },
-  { topic:'Adverbs — tvorenie', q:'Príslovka od "late"?', opts:['lately','latily','late','lated'], ans:'late', hint:'Pravidlo 5: late zostáva late. (Lately = nedávno — iné slovo!)' },
+  // GOING TO — negative (fill)
+  {topic:'goingto',type:'Going to — write NEGATIVE form',mode:'fill',text:'We\'re too busy. We _____ have lunch.\n(aren\'t/isn\'t going to)',ans:"aren't going to",accept:["aren't going to","are not going to","arent going to"],hint:'we → are not → aren\'t going to.'},
+  {topic:'goingto',type:'Going to — write NEGATIVE form',mode:'fill',text:'The weather is bad. We _____ go to the beach.\n(aren\'t/isn\'t going to)',ans:"aren't going to",accept:["aren't going to","are not going to","arent going to"],hint:'we → aren\'t going to.'},
+  {topic:'goingto',type:'Going to — write NEGATIVE form',mode:'fill',text:'Alex is sick. He _____ go to work today.\n(aren\'t/isn\'t going to)',ans:"isn't going to",accept:["isn't going to","is not going to","isnt going to"],hint:'he → is not → isn\'t going to.'},
 
-  // ADVERBS — typy
-  { topic:'Adverbs — typy', q:'"She speaks quietly." — aký typ príslovky je "quietly"?', opts:['manner','time','place','frequency'], ans:'manner', hint:'Manner = opisuje HOW (ako) sa niečo deje' },
-  { topic:'Adverbs — typy', q:'"I will call you tomorrow." — aký typ je "tomorrow"?', opts:['place','frequency','time','manner'], ans:'time', hint:'Time = WHEN (kedy)' },
-  { topic:'Adverbs — typy', q:'"She is outside." — aký typ je "outside"?', opts:['manner','time','place','degree'], ans:'place', hint:'Place = WHERE (kde)' },
-  { topic:'Adverbs — typy', q:'"I always brush my teeth." — aký typ je "always"?', opts:['manner','degree','time','frequency'], ans:'frequency', hint:'Frequency = HOW OFTEN (ako často)' },
-  { topic:'Adverbs — typy', q:'"She is very tired." — aký typ je "very"?', opts:['manner','degree','time','place'], ans:'degree', hint:'Degree = HOW MUCH (do akej miery)' },
+  // GOING TO — questions (fill2)
+  {topic:'goingto',type:'Going to — write QUESTION form',mode:'fill2',text:'"_____ your brother _____ travel next week?"',labels:['1st word (Is/Are/Am?)','2nd part'],ans:['is','going to'],accept:[['is'],['going to']],hint:'your brother = he → Is + he + going to?'},
+  {topic:'goingto',type:'Going to — write QUESTION form',mode:'fill2',text:'"Where _____ they _____ stay in Paris?"',labels:['1st word (is/are/am?)','2nd part'],ans:['are','going to'],accept:[['are'],['going to']],hint:'they → Are + they + going to?'},
+  {topic:'goingto',type:'Going to — write QUESTION form',mode:'fill2',text:'"What _____ you _____ buy for her birthday?"',labels:['1st word (is/are/am?)','2nd part'],ans:['are','going to'],accept:[['are'],['going to']],hint:'you → Are + you + going to?'},
 
-  // ADVERBS vs ADJECTIVES
-  { topic:'Adjective vs Adverb', q:'"She is a ___ singer." — quick alebo quickly?', opts:['quickly','quick','quicking','quicked'], ans:'quick', hint:'Singer je noun → opisujeme adjektívom "quick"' },
-  { topic:'Adjective vs Adverb', q:'"She sings ___." — beautiful alebo beautifully?', opts:['beautiful','beauty','beautifully','beautifuly'], ans:'beautifully', hint:'Sings je verb → opisujeme príslovkou "beautifully"' },
-  { topic:'Adjective vs Adverb', q:'"He is a ___ driver." — careful alebo carefully?', opts:['carefully','care','careful','caringly'], ans:'careful', hint:'Driver je noun → adjektívum "careful"' },
-  { topic:'Adjective vs Adverb', q:'"He drives ___." — careful alebo carefully?', opts:['careful','care','caringly','carefully'], ans:'carefully', hint:'Drives je verb → príslovka "carefully"' },
-
-  // GOING TO
-  { topic:'Going to', q:'"I ___ visit my grandma next week." — doplň:', opts:["I'm going to","I going to","I am go to","I goes to"], ans:"I'm going to", hint:"I am going to → skrátene I'm going to" },
-  { topic:'Going to', q:'"___ they going to win?" — doplň:', opts:['Are','Is','Am','Do'], ans:'Are', hint:'They → Are they going to...?' },
-  { topic:'Going to', q:'"She ___ not going to come." — doplň:', opts:['are','am','is','be'], ans:'is', hint:'She → is. She is not going to...' },
-  { topic:'Going to', q:'"We ___ going to travel to Italy." — doplň:', opts:["are","is","am","be"], ans:"are", hint:"We → are going to" },
-  { topic:'Going to', q:'Záporná forma: "He is going to play football."', opts:["He isn't going to play football.","He doesn't going to play football.","He not going to play football.","He isn't go to play football."], ans:"He isn't going to play football.", hint:"is → isn't. He isn't going to..." },
-  { topic:'Going to', q:'"___ you going to study tonight?" — doplň:', opts:['Are','Is','Am','Do'], ans:'Are', hint:'You → Are you going to...?' },
-  { topic:'Going to', q:'"I ___ going to eat pizza for dinner."', opts:["am","is","are","be"], ans:"am", hint:"I → am going to" },
-
-  // PRESENT CONTINUOUS
-  { topic:'Present Continuous — plány', q:'"I ___ (fly) to London on Friday." — dohodnutý let:', opts:["I'm flying","I fly","I going to fly","I flies"], ans:"I'm flying", hint:"Arrangement = dohodnutý plán → Present Continuous: I'm flying" },
-  { topic:'Present Continuous — plány', q:'"She ___ (see) the dentist tomorrow at 3." — objednaná:', opts:["She's seeing","She sees","She going to see","She see"], ans:"She's seeing", hint:"Dohodnutý termín → She's seeing (is + seeing)" },
-  { topic:'Present Continuous — plány', q:'"We ___ (meet) our friends on Saturday."', opts:["We're meeting","We meet","We going to meet","We meetings"], ans:"We're meeting", hint:"Dohodnuté stretnutie → We're meeting (are + meeting)" },
-  { topic:'Present Continuous — plány', q:'"___ you doing anything tonight?" — doplň:', opts:['Are','Is','Am','Do'], ans:'Are', hint:'You → Are you doing...?' },
-  { topic:'Present Continuous — plány', q:'"They ___ (not/come) to the party tonight." — doplň:', opts:["They aren't coming","They not coming","They don't coming","They isn't coming"], ans:"They aren't coming", hint:"They are → They aren't coming" },
-  { topic:'Present Continuous — plány', q:'Mám rezervovaný hotel v Paríži na budúci týždeň. Poviem:', opts:["I'm staying in Paris next week.","I stay in Paris next week.","I'm going to stay maybe in Paris.","I will staying in Paris."], ans:"I'm staying in Paris next week.", hint:"Rezervácia = arrangement → Present Continuous: I'm staying" },
+  // GOING TO — prediction vs intention (mc)
+  {topic:'goingto',type:'Prediction OR plan/intention?',mode:'mc',text:'Look at those dark clouds! It\'s going to rain soon.',opts:['prediction (based on evidence)','plan / intention'],ans:'prediction (based on evidence)',hint:'Vidíme mraky = dôkaz teraz → prediction based on evidence.'},
+  {topic:'goingto',type:'Prediction OR plan/intention?',mode:'mc',text:'"I\'m going to study harder next term," said Sam.',opts:['prediction (based on evidence)','plan / intention'],ans:'plan / intention',hint:'Sam sa rozhodol → plan / intention.'},
+  {topic:'goingto',type:'Prediction OR plan/intention?',mode:'mc',text:'"Stop the car! We\'re going to have an accident!"',opts:['prediction (based on evidence)','plan / intention'],ans:'prediction (based on evidence)',hint:'Vidíme nebezpečenstvo teraz → prediction based on evidence.'},
 ];
 
-// ══════════════════════════════════════════════
-// APP STATE
-// ══════════════════════════════════════════════
-let currentLearnTopic = null;
-let currentLearnStep = 0;
-let learnStepAnswered = false;
+let queue=[],current=0,wrongIndices=[],correct=0,streak=0,streakTimer=null,isRetry=false,answered=false;
 
-let quizQueue = [];
-let quizIdx = 0;
-let quizWrong = [];
-let quizRound = 1;
-let currentQuizTopic = null;
-let quizAnswered = false;
-let correctCount = 0;
-let totalAnswered = 0;
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-// ══════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+function startQuiz(retry){
+  isRetry=retry;
+  queue=retry?wrongIndices.map(i=>ALL_QUESTIONS[i]):shuffle(ALL_QUESTIONS);
+  wrongIndices=[];current=0;correct=0;streak=0;
+  showScreen('scQuiz');renderQuestion();
 }
-function showHome() { showScreen('home'); }
+function startRetry(){startQuiz(true);}
 
-// ══════════════════════════════════════════════
-// LEARN
-// ══════════════════════════════════════════════
-function startLearn(topic) {
-  currentLearnTopic = topic;
-  currentLearnStep = 0;
-  learnStepAnswered = false;
-  showScreen('learn');
-  renderLearnStep();
+function renderQuestion(){
+  answered=false;
+  const q=queue[current],total=queue.length;
+  const tagEl=document.getElementById('qTag');
+  tagEl.textContent=q.topic==='adverb'?'Adverbs':q.topic==='pc'?'Present Cont.':'Going To';
+  tagEl.className='tag '+(q.topic==='adverb'?'tag-adverb':q.topic==='pc'?'tag-pc':'tag-goingto');
+  document.getElementById('progressFill').style.width=Math.round((current/total)*100)+'%';
+  document.getElementById('progressText').textContent=current+' / '+total;
+  document.getElementById('qType').textContent=q.type;
+  document.getElementById('qText').innerHTML=q.text.replace(/\n/g,'<br>');
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('feedback').innerHTML='';
+  document.getElementById('nextBtn').className='next-btn';
+  const container=document.getElementById('qInput');
+  container.innerHTML='';
+  if(q.mode==='mc') renderMC(q,container);
+  else if(q.mode==='fill') renderFill(q,container);
+  else if(q.mode==='fill2') renderFillN(q,container,2);
 }
 
-function renderLearnStep() {
-  const steps = learnSteps[currentLearnTopic];
-  const step = steps[currentLearnStep];
-  const total = steps.length;
-  learnStepAnswered = false;
-
-  document.getElementById('learnProgFill').style.width = ((currentLearnStep / total) * 100) + '%';
-  document.getElementById('learnStepCount').textContent = (currentLearnStep + 1) + ' / ' + total;
-
-  const nextBtn = document.getElementById('learnNextBtn');
-  nextBtn.classList.remove('show');
-  nextBtn.textContent = currentLearnStep < total - 1 ? 'Ďalej →' : 'Hotovo! ✓';
-
-  let exHtml = '';
-  if (step.examples) {
-    step.examples.forEach(ex => {
-      exHtml += '<div class="example-box">';
-      if (ex.label) exHtml += `<div class="ex-label">${ex.label}</div>`;
-      if (ex.pairs) ex.pairs.forEach(p => {
-        exHtml += `<div class="ex-item"><span>${p[0]}</span>${p[1] ? '<span class="ex-arrow">→</span><span><strong>' + p[1] + '</strong></span>' : ''}</div>`;
-      });
-      if (ex.sent) exHtml += `<div class="ex-sent">${ex.sent}</div>`;
-      exHtml += '</div>';
-    });
-  }
-
-  let tryHtml = '';
-  if (step.try) {
-    const letters = ['A','B','C','D'];
-    tryHtml = `<div class="try-box">
-      <div class="try-label">✏️ Vyskúšaj si:</div>
-      <div class="try-question">${step.try.q}</div>
-      <div class="try-options" id="tryOpts">
-        ${step.try.opts.map((o,i) => `<button class="try-opt" onclick="tryAnswer(this,'${o.replace(/'/g,"\\'")}','${step.try.ans.replace(/'/g,"\\'")}','${step.try.fb.replace(/'/g,"\\'")}')">${letters[i]}. ${o}</button>`).join('')}
-      </div>
-      <div class="try-feedback" id="tryFeedback"></div>
-    </div>`;
-  }
-
-  document.getElementById('learnContent').innerHTML = `
-    <div class="learn-card">
-      <span class="learn-topic-tag">${step.tag}</span>
-      <h2 class="learn-rule-title">${step.title}</h2>
-      <div class="learn-rule-desc">${step.desc}</div>
-      ${exHtml}
-      ${tryHtml}
-    </div>
-  `;
-}
-
-function tryAnswer(btn, chosen, correct, fb) {
-  if (learnStepAnswered) return;
-  learnStepAnswered = true;
-  const opts = document.querySelectorAll('.try-opt');
-  opts.forEach(o => { o.classList.add('disabled'); });
-  const fbEl = document.getElementById('tryFeedback');
-  if (chosen === correct) {
-    btn.classList.add('correct');
-    fbEl.textContent = '✅ ' + fb;
-    fbEl.className = 'try-feedback show ok';
-  } else {
-    btn.classList.add('wrong');
-    opts.forEach(o => { if (o.textContent.includes(correct)) o.classList.add('correct'); });
-    fbEl.textContent = '❌ Správna odpoveď: ' + correct + '. ' + fb;
-    fbEl.className = 'try-feedback show bad';
-  }
-  document.getElementById('learnNextBtn').classList.add('show');
-}
-
-function learnNext() {
-  const steps = learnSteps[currentLearnTopic];
-  currentLearnStep++;
-  if (currentLearnStep >= steps.length) {
-    document.getElementById('learnDoneQuizBtn').onclick = () => startQuiz(currentLearnTopic);
-    showScreen('learn-done');
-  } else {
-    renderLearnStep();
-  }
-}
-
-function startQuizFromLearn() {
-  startQuiz(currentLearnTopic);
-}
-
-// ══════════════════════════════════════════════
-// QUIZ
-// ══════════════════════════════════════════════
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-function startQuiz(topic) {
-  currentQuizTopic = topic;
-  quizRound = 1;
-  correctCount = 0;
-  totalAnswered = 0;
-  let pool = topic ? allQuestions.filter(q => {
-    if (topic === 'adverbs') return q.topic.startsWith('Adverbs') || q.topic.startsWith('Adjective');
-    if (topic === 'goingto') return q.topic === 'Going to';
-    if (topic === 'presCont') return q.topic.startsWith('Present Continuous');
-    return true;
-  }) : [...allQuestions];
-  quizQueue = shuffle([...pool]);
-  quizIdx = 0;
-  quizWrong = [];
-  showScreen('quiz');
-  renderQuizQ();
-}
-
-function renderQuizQ() {
-  quizAnswered = false;
-  const q = quizQueue[quizIdx];
-  const total = quizQueue.length;
-  const letters = ['A','B','C','D'];
-
-  document.getElementById('quizProgFill').style.width = ((quizIdx / total) * 100) + '%';
-  document.getElementById('quizRoundBadge').textContent = 'Kolo ' + quizRound;
-
-  const shuffledOpts = shuffle([...q.opts]);
-
-  document.getElementById('quizContent').innerHTML = `
-    <div class="quiz-q-card">
-      <span class="quiz-q-tag">${q.topic}</span>
-      <div class="quiz-q-text">${q.q}</div>
-      ${q.hint ? `<div class="quiz-q-hint">💡 ${q.hint}</div>` : ''}
-      <div class="quiz-opts" id="quizOpts">
-        ${shuffledOpts.map((o,i) => `<button class="quiz-opt" onclick="quizAnswer(this,'${o.replace(/'/g,"\\'")}','${q.ans.replace(/'/g,"\\'")}')">
-          <span class="opt-letter">${letters[i]}</span>${o}
-        </button>`).join('')}
-      </div>
-    </div>
-  `;
-  document.getElementById('quizFeedback').className = 'quiz-feedback';
-  document.getElementById('quizFeedback').textContent = '';
-  document.getElementById('quizNextBtn').classList.remove('show');
-}
-
-function quizAnswer(btn, chosen, correct) {
-  if (quizAnswered) return;
-  quizAnswered = true;
-  totalAnswered++;
-
-  document.querySelectorAll('.quiz-opt').forEach(o => o.classList.add('disabled'));
-  const fb = document.getElementById('quizFeedback');
-  const q = quizQueue[quizIdx];
-
-  if (chosen === correct) {
-    btn.classList.add('correct');
-    fb.textContent = '✅ Správne!';
-    fb.className = 'quiz-feedback show ok';
-    correctCount++;
-  } else {
-    btn.classList.add('wrong');
-    document.querySelectorAll('.quiz-opt').forEach(o => {
-      if (o.textContent.trim().includes(correct)) o.classList.add('correct');
-    });
-    fb.textContent = `❌ Správna odpoveď: ${correct}`;
-    fb.className = 'quiz-feedback show bad';
-    quizWrong.push(q);
-  }
-  document.getElementById('quizNextBtn').classList.add('show');
-}
-
-function quizNext() {
-  quizIdx++;
-  if (quizIdx >= quizQueue.length) {
-    showResults();
-  } else {
-    renderQuizQ();
-  }
-}
-
-function showResults() {
-  const total = quizQueue.length;
-  const correct = total - quizWrong.length;
-  const pct = Math.round((correct / total) * 100);
-
-  let emoji, title, sub;
-  if (pct === 100) { emoji = '🏆'; title = 'Perfektné!'; sub = 'Všetko správne! Si šikovná!'; }
-  else if (pct >= 80) { emoji = '🌟'; title = 'Výborne!'; sub = 'Skoro všetko! Ešte pár chybičiek na zopakovanie.'; }
-  else if (pct >= 60) { emoji = '💪'; title = 'Dobre!'; sub = 'Máš to takmer! Zopakuj si chyby.'; }
-  else { emoji = '📚'; title = 'Treba zopakovať'; sub = 'Nevadí, na to tu sme! Zopakuj si chyby.'; }
-
-  document.getElementById('resultsEmoji').textContent = emoji;
-  document.getElementById('resultsTitle').textContent = title;
-  document.getElementById('resultsScore').textContent = correct + ' / ' + total;
-  document.getElementById('resultsSub').textContent = sub;
-
-  // breakdown by topic
-  const topics = {};
-  quizQueue.forEach(q => {
-    if (!topics[q.topic]) topics[q.topic] = { total: 0, wrong: 0 };
-    topics[q.topic].total++;
+function renderMC(q,container){
+  const wrap=document.createElement('div');wrap.className='options';
+  shuffle(q.opts).forEach(opt=>{
+    const btn=document.createElement('button');btn.className='opt-btn';btn.textContent=opt;
+    btn.onclick=()=>{
+      if(answered)return;answered=true;
+      const ok=opt===q.ans;
+      wrap.querySelectorAll('.opt-btn').forEach(b=>{b.disabled=true;if(b.textContent===q.ans)b.classList.add(ok?'correct':'reveal');if(b.textContent===opt&&!ok)b.classList.add('wrong');});
+      showFeedback(ok,q);
+    };
+    wrap.appendChild(btn);
   });
-  quizWrong.forEach(q => { if (topics[q.topic]) topics[q.topic].wrong++; });
-
-  let bdHtml = '<div class="breakdown-title">Prehľad podľa témy</div>';
-  Object.entries(topics).forEach(([t, v]) => {
-    const c = v.total - v.wrong;
-    bdHtml += `<div class="breakdown-row">
-      <span class="breakdown-label">${t}</span>
-      <span class="breakdown-val ${v.wrong === 0 ? 'val-good' : 'val-bad'}">${c}/${v.total}</span>
-    </div>`;
-  });
-  document.getElementById('resultsBreakdown').innerHTML = bdHtml;
-
-  let btnsHtml = '';
-  if (quizWrong.length > 0) {
-    btnsHtml += `<button class="btn-retry" onclick="retryWrong()">🔁 Zopakovať chyby (${quizWrong.length})</button>`;
-  }
-  btnsHtml += `<button class="btn-retry" onclick="startQuiz(currentQuizTopic)" style="background:linear-gradient(135deg,var(--teal),var(--purple));color:#0f0e17">🔄 Celý test znova</button>`;
-  btnsHtml += `<button class="btn-home-result" onclick="showHome()">← Späť na výber</button>`;
-  document.getElementById('resultsBtns').innerHTML = btnsHtml;
-
-  showScreen('results');
+  container.appendChild(wrap);
 }
 
-function retryWrong() {
-  quizRound++;
-  quizQueue = shuffle([...quizWrong]);
-  quizIdx = 0;
-  quizWrong = [];
-  showScreen('quiz');
-  renderQuizQ();
+// normalize: lowercase + strip all apostrophe variants + trim
+function norm(s){return s.trim().toLowerCase().replace(/[\u2019\u2018\u0060\u00B4']/g,"'");}
+
+function renderFill(q,container){
+  const wrap=document.createElement('div');wrap.className='fill-wrap';
+  const inp=document.createElement('input');inp.type='text';inp.className='fill-input';inp.placeholder='Write your answer...';inp.autocomplete='off';inp.autocorrect='off';inp.autocapitalize='off';
+  wrap.appendChild(inp);
+  const btn=document.createElement('button');btn.className='check-btn';btn.textContent='Check ✓';
+  btn.onclick=()=>{
+    if(answered)return;answered=true;btn.disabled=true;inp.disabled=true;
+    const val=norm(inp.value);
+    const accepted=q.accept?q.accept.map(a=>norm(a)):[norm(q.ans)];
+    const ok=accepted.includes(val);
+    inp.classList.add(ok?'correct':'wrong');
+    showFeedback(ok,q);
+  };
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+  wrap.appendChild(btn);
+  container.appendChild(wrap);
+  setTimeout(()=>inp.focus(),100);
+}
+
+function renderFillN(q,container,n){
+  const wrap=document.createElement('div');wrap.className='fill-wrap';
+  const inputs=[];
+  for(let i=0;i<n;i++){
+    const row=document.createElement('div');row.className='fill-row';
+    if(q.labels&&q.labels[i]){const lbl=document.createElement('div');lbl.className='fill-label';lbl.textContent=q.labels[i];row.appendChild(lbl);}
+    const inp=document.createElement('input');inp.type='text';inp.className='fill-input';inp.placeholder='Write here...';inp.autocomplete='off';inp.autocorrect='off';inp.autocapitalize='off';
+    row.appendChild(inp);wrap.appendChild(row);inputs.push(inp);
+  }
+  const btn=document.createElement('button');btn.className='check-btn';btn.textContent='Check ✓';
+  btn.onclick=()=>{
+    if(answered)return;answered=true;btn.disabled=true;
+    let allOk=true;
+    inputs.forEach((inp,i)=>{
+      inp.disabled=true;
+      const val=norm(inp.value);
+      const accepted=(q.accept&&q.accept[i])?q.accept[i].map(a=>norm(a)):[norm(q.ans[i])];
+      const ok=accepted.includes(val);
+      inp.classList.add(ok?'correct':'wrong');
+      if(!ok)allOk=false;
+    });
+    showFeedback(allOk,q);
+  };
+  inputs[inputs.length-1].addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+  wrap.appendChild(btn);container.appendChild(wrap);
+  setTimeout(()=>inputs[0].focus(),100);
+}
+
+function showFeedback(ok,q){
+  const fb=document.getElementById('feedback');
+  if(ok){
+    correct++;streak++;
+    fb.className='feedback ok show';
+    const msgs=['Správne! ⭐','Výborne! 🎉','Presne tak! ✨','Skvelé! 🌟','Bravo! 🚀','Super! 💪'];
+    fb.textContent=msgs[Math.floor(Math.random()*msgs.length)];
+    if(streak>=3)showStreak();
+  } else {
+    const origIdx=ALL_QUESTIONS.indexOf(q);
+    if(origIdx!==-1&&!wrongIndices.includes(origIdx))wrongIndices.push(origIdx);
+    streak=0;
+    fb.className='feedback bad show';
+    const ans=Array.isArray(q.ans)?q.ans.join(' + '):q.ans;
+    fb.innerHTML='✗ Správna odpoveď: <strong>'+ans+'</strong><br><span style="font-weight:600;opacity:.85">'+q.hint+'</span>';
+  }
+  document.getElementById('nextBtn').className='next-btn show';
+}
+
+function nextQuestion(){current++;if(current>=queue.length)finishQuiz();else renderQuestion();}
+
+function finishQuiz(){
+  const total=queue.length,wrong=total-correct,pct=Math.round((correct/total)*100);
+  if(wrong===0){
+    document.getElementById('perfectMsg').textContent=isRetry?'Všetky opakované otázky správne! Teraz to máš naozaj v hlave. Agátka WIN! 🎉':'Všetky otázky správne na prvý pokus! Si hviezda! 🌟';
+    showScreen('scPerfect');launchConfetti();return;
+  }
+  let grade,emoji,msg;
+  if(pct>=90){grade='A';emoji='🌟';msg='Skvelý výsledok! Skoro perfektné.';}
+  else if(pct>=75){grade='B';emoji='😊';msg='Dobrý výkon! Niektoré veci si ešte zopakovať.';}
+  else if(pct>=60){grade='C';emoji='💪';msg='Nie je to zlé — ale vieš to lepšie. Zopakuj chyby!';}
+  else if(pct>=45){grade='D';emoji='📚';msg='Ešte je čo zlepšovať. Retry pomôže!';}
+  else{grade='F';emoji='🔥';msg='Nevzdávaj sa! Každá chyba ťa niečo naučí.';}
+  document.getElementById('rEmoji').textContent=emoji;
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rPct').textContent=pct+'% ('+correct+'/'+total+')';
+  document.getElementById('rCorrect').textContent='✓ '+correct+' správne';
+  document.getElementById('rWrong').textContent='✗ '+wrong+' chýb';
+  document.getElementById('rMsg').textContent=msg;
+  document.getElementById('retryBtn').style.display=wrong>0?'inline-block':'none';
+  showScreen('scResult');
+}
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+function showStreak(){
+  const el=document.getElementById('streakBadge');
+  document.getElementById('streakCount').textContent=streak;
+  el.classList.add('show');clearTimeout(streakTimer);
+  streakTimer=setTimeout(()=>el.classList.remove('show'),2400);
+}
+
+function launchConfetti(){
+  const colors=['#a855f7','#f472b6','#34d399','#fbbf24','#60a5fa'];
+  for(let i=0;i<60;i++){setTimeout(()=>{const el=document.createElement('div');el.className='confetti-piece';el.style.cssText=`left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-duration:${1.5+Math.random()*2}s;border-radius:${Math.random()>.5?'50%':'2px'};`;document.body.appendChild(el);el.addEventListener('animationend',()=>el.remove());},i*40);}
 }
 </script>
 </body>
